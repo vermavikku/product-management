@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const isProd = process.env.NODE_ENV === "production"; // Detect if running in production
+console.log(isProd);
 
 export default {
   type: "postgres" as const,
