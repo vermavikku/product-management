@@ -1,18 +1,23 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+const isProd = process.env.NODE_ENV === "production"; // Detect if running in production
+
 export default {
   type: "postgres" as const,
   host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),  // Ensure port is a number
+  port: Number(process.env.DB_PORT),
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   synchronize: true,
   logging: false,
-  // Correct path resolution using __dirname
-  entities: [__dirname + "/src/entities/**/*.ts"],  // ✅ Ensure the path is correct for entities
-  migrations: [__dirname + "/src/migrations/**/*.ts"],  // ✅ Ensure the path is correct for migrations
+  entities: [
+    isProd ? "dist/entities/**/*.js" : "src/entities/**/*.ts", // ✅ Correct path for both environments
+  ],
+  migrations: [
+    isProd ? "dist/migrations/**/*.js" : "src/migrations/**/*.ts", // ✅ Correct path for both environments
+  ],
   cli: {
     migrationsDir: "src/migrations",
   },
